@@ -3,7 +3,6 @@ package PayLoadBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-
 public class APIPayloadBuilder {
     public static JSONObject registerStationAPI(String external_id, String name, String latitude, String longitude, String altitude) {
         JSONObject jsonObject = new JSONObject();
@@ -62,5 +61,4 @@ public class APIPayloadBuilder {
         measurementsArray.add(measurementObject);
         return measurementsArray;
     }
-
 }

@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import static Tests.PostStationAPITests.stationId;
 import static io.restassured.RestAssured.given;
 
-public class registerMeasurementsTest {
+public class RegisterMeasurementsTest {
     @Test(
             dataProvider = "Measurements",
             dataProviderClass = Utils.TestDataProviders.class,

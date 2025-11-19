@@ -3,7 +3,8 @@
     <test name="LoginTests">
         <classes>
             <class name="Tests.PostStationAPITests"/>
-            <class name="Tests.registerMeasurementsTest"/>
+            <class name="Tests.RegisterMeasurementsTest"/>
+            <class name="Tests.GetStationByStationIDTests"/>
         </classes>
     </test>
     <listeners>
