@@ -101,12 +101,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <OPENWEATHER_API_KEY>${OPENWEATHER_API_KEY}</OPENWEATHER_API_KEY>
-                    </systemPropertyVariables>
-                </configuration>
+
             </plugin>
+
         </plugins>
     </build>
 
