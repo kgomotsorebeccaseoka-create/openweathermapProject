@@ -49,3 +49,7 @@ id_rsa*
 id_dsa*
 secret.*
 secrets/
+credentials/
+src/main/resources/secrets/
+src/main/resources/credentials/
+src/test/java/TestData/data.xlsx

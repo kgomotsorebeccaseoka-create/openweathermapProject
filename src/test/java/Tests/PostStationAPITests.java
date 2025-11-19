@@ -1,39 +1,58 @@
 package Tests;
 
-import io.qameta.allure.Description;
+import Common.BasePaths;
+import PayLoadBuilder.APIPayloadBuilder;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
-
-import static Common.commonTestData.create_success_status_code;
-import static RequestBuilder.APIRequestBuilder.registerStationResponse;
-import static Utils.generateTestData.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static io.restassured.RestAssured.given;
 
 
-@Test
 @Feature("Ndosi API")
 @Story("Login")
 public class PostStationAPITests {
 
     private static String token;
+    private static String stationId;
 
-     
 
-    public void registerStationTest() {
-        Response response = registerStationResponse(externalId, name, latitude, longitude, altitude).
-                then().
-                log().all().
-                assertThat().
-                statusCode(create_success_status_code).
-                body("ID", notNullValue()).
-                body("external_id", equalTo(externalId)).
-                body("name", equalTo(name)).
-                body("latitude", equalTo(latitude)).
-                body("longitude", equalTo(longitude)).
-                extract().
-                response();
-    }
+  @Test(
+          dataProvider = "RegistrationStation",
+          dataProviderClass = Utils.TestDataProviders.class
+  )
+  public void registerStationTest(String scenario,
+                                  String endpoint,
+                                  String externalId,
+                                  String name,
+                                  String latitude,
+                                  String longitude,
+                                  String altitude,
+                                  String expectedStatusStr) {
+
+      System.out.println("=== Scenario: " + scenario + " ===");
+
+      int expectedStatus = Integer.parseInt(expectedStatusStr);
+
+      JSONObject requestBody = APIPayloadBuilder.registerStationAPI(externalId, name, latitude, longitude, altitude);
+        Response response =
+
+                (Response) given().
+                        baseUri(BasePaths.OpenWeatherBaseUrl).
+                        basePath(endpoint).
+                        queryParam("appid", Common.Secrets.openWeatherKey()).
+                        contentType("application/json").
+                        body(requestBody).
+                        log().all().
+                        post().
+                        then().
+                        log().all().
+                        extract().response();
+
+        assert response.statusCode() == expectedStatus :
+                "Expected status code: " + expectedStatus + ", but got: " + response.statusCode();
+
+      stationId = response.jsonPath().getString("id");
+  }
 }
