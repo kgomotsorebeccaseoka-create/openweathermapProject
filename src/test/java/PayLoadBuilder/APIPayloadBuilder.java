@@ -1,4 +1,6 @@
 package PayLoadBuilder;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
@@ -13,7 +15,10 @@ public class APIPayloadBuilder {
 
         return jsonObject;
     }
-    /** Converts numbers; if invalid (e.g. “ABC”), keeps as String → good for negative tests */
+
+    /**
+     * Converts numbers; if invalid (e.g. “ABC”), keeps as String → good for negative tests
+     */
     private static Object numberOrString(String value) {
         if (value == null || value.trim().isEmpty()) {
             return "";  // Excel blank = JSON null
@@ -27,13 +32,35 @@ public class APIPayloadBuilder {
     }
 
 
+    public static JSONArray postMeasurements(String station_id, String dt, String temperature, String wind_speed,
+                                             String wind_gust, String pressure, String humidity, String rain_1h, String cloudsCondition) {
 
-  /*  public static JSONObject postMeasurements(String station_id, int dt, float temperature, float wind_speed,
-                                              float wind_gust, int pressure, int humidity, int  rain_1h)
-    {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Station_id",);
-        return jsonObject;
-    }*/
+        JSONArray measurementsArray = new JSONArray();
+        JSONArray conditionsArray = new JSONArray();
+
+
+        JSONObject measurementObject = new JSONObject();
+        measurementObject.put("station_id", station_id);
+        measurementObject.put("dt", numberOrString(dt));
+        measurementObject.put("temperature", numberOrString(temperature));
+        measurementObject.put("wind_speed", numberOrString(wind_speed));
+        measurementObject.put("wind_gust", numberOrString(wind_gust));
+        measurementObject.put("pressure", numberOrString(pressure));
+        measurementObject.put("humidity", numberOrString(humidity));
+        measurementObject.put("rain_1h", numberOrString(rain_1h));
+
+        if (cloudsCondition != null && !cloudsCondition.trim().isEmpty()) {
+            String[] conditions = cloudsCondition.split(";");
+
+            for (String condition : conditions) {
+                JSONObject conditionObject = new JSONObject();
+                conditionObject.put("condition", condition.trim());
+                conditionsArray.add(conditionObject);
+            }
+            measurementObject.put("conditions", conditionsArray);
+        }
+        measurementsArray.add(measurementObject);
+        return measurementsArray;
+    }
 
 }

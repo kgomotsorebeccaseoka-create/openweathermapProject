@@ -27,4 +27,19 @@ public class APIRequestBuilder {
                 log().all().
                 extract().response();
     }
+
+    public static Response postMeasurementsResponse(String station_id, String dt, String temperature, String wind_speed,
+                                                    String wind_gust, String pressure, String humidity, String  rain_1h, String cloudsCondition) {
+        return given().
+                baseUri(OpenWeatherBaseUrl).
+                basePath("/measurements").
+                queryParam("appid", Secrets.openWeatherKey()).
+                contentType("application/json").
+                body(postMeasurements(station_id, dt, temperature, wind_speed, wind_gust, pressure, humidity, rain_1h, cloudsCondition)).
+                log().all().
+                post().
+                then().
+                log().all().
+                extract().response();
+    }
 }
